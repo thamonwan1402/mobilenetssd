@@ -125,6 +125,7 @@ def reply(intent,text,reply_token,id,disname):
     line_bot_api.reply_message(reply_token,text_message)
 
 def event_handle(event,json_line):
+    print(event)
     try:
         userId = event['source']['userId']
     except:
@@ -157,6 +158,12 @@ def event_handle(event,json_line):
         elif msg == "ใจร้าย":
             replyObj = TextSendMessage(text="หยุดเพ้อขอร้อง")
             ine_bot_api.reply_message(rtoken, replyObj)
+        else msg == "covid":
+            url = "https://covid19.ddc.moph.go.th/api/Cases/today-cases-all"
+            response = requests.get(url)
+            response = response.json()
+            replyObj = TextSendMessage(text=str(response))
+            line_bot_api.reply_message(rtoken, replyObj)
         else :
             headers = request.headers
             json_headers = ({k:v for k, v in headers.items()})
